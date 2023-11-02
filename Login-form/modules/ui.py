@@ -56,7 +56,6 @@ if cmd_opts.ngrok is not None:
         cmd_opts.ngrok_options
         )
 
-
 def gr_show(visible=True):
     return {"visible": visible, "__type__": "update"}
 
@@ -1352,7 +1351,7 @@ def setup_ui_api(app):
     app.add_api_route("/internal/ping", lambda: {}, methods=["GET"])
 
     app.add_api_route("/internal/profile-startup", lambda: timer.startup_record, methods=["GET"])
-
+    
     def download_sysinfo(attachment=False):
         from fastapi.responses import PlainTextResponse
 

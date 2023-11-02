@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import time
-
+import gradio as gr
 from modules import timer
 from modules import initialize_util
 from modules import initialize
@@ -96,7 +96,7 @@ def webui():
         )
 
         startup_timer.record("gradio launch")
-
+        
         # gradio uses a very open CORS policy via app.user_middleware, which makes it possible for
         # an attacker to trick the user into opening a malicious HTML page, which makes a request to the
         # running web ui and do whatever the attacker wants, including installing an extension and
