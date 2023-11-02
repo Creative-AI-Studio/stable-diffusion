@@ -8,13 +8,6 @@ config = ConfigParser()
 
 config.read(filenames='config/config.ini')
 
-# path = os.getcwd()
-# config.read(filenames='C:/work/stable-diffusion/config/config.ini')
-
-# config_path = 'config/config.ini'
-# print("Trying to load config from:", os.path.abspath(config_path))
-# config.read(filenames=config_path)
-
 
 class ServerConfig():
     def __init__(self):

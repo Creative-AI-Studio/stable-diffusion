@@ -72,9 +72,9 @@ def webui():
         auto_launch_browser = False
         if os.getenv('SD_WEBUI_RESTARTING') != '1':
             if shared.opts.auto_launch_browser == "Remote" or cmd_opts.autolaunch:
-                auto_launch_browser = True
+                auto_launch_browser = False
             elif shared.opts.auto_launch_browser == "Local":
-                auto_launch_browser = not any([cmd_opts.listen, cmd_opts.share, cmd_opts.ngrok, cmd_opts.server_name])
+                auto_launch_browser = False  # 이 부분도 False로 설정
 
         app, local_url, share_url = shared.demo.launch(
             share=cmd_opts.share,
