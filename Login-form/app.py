@@ -44,7 +44,7 @@ def webui():
     if not is_logged_in():
         flash('로그인이 필요합니다.', 'danger')
         return redirect(url_for('login'))
-    return redirect('http://localhost:7860')  # 여기서 webui.py가 실행되는 포트입니다. 필요에 따라 변경하세요.
+    return redirect('http://127.0.0.1:7860')  
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

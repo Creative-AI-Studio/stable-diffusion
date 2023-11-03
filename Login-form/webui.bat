@@ -42,7 +42,13 @@ echo venv %PYTHON%
 
 :skip_venv
 if [%ACCELERATE%] == ["True"] goto :accelerate
-goto :launch
+goto :check_launch_file
+
+:check_launch_file
+if exist "%~dp0launch.py" goto :launch
+echo Error: launch.py does not exist in the directory %~dp0
+pause
+exit /b
 
 :accelerate
 echo Checking for accelerate
@@ -50,23 +56,21 @@ set ACCELERATE="%VENV_DIR%\Scripts\accelerate.exe"
 if EXIST %ACCELERATE% goto :accelerate_launch
 
 :launch
-%PYTHON% launch.py %*
+%PYTHON% "%~dp0launch.py" %*
 if EXIST tmp/restart goto :skip_venv
 pause
 exit /b
 
 :accelerate_launch
 echo Accelerating
-%ACCELERATE% launch --num_cpu_threads_per_process=6 launch.py
+%ACCELERATE% launch --num_cpu_threads_per_process=6 "%~dp0launch.py"
 if EXIST tmp/restart goto :skip_venv
 pause
 exit /b
 
 :show_stdout_stderr
-
 echo.
 echo exit code: %errorlevel%
-
 for /f %%i in ("tmp\stdout.txt") do set size=%%~zi
 if %size% equ 0 goto :show_stderr
 echo.
@@ -75,13 +79,12 @@ type tmp\stdout.txt
 
 :show_stderr
 for /f %%i in ("tmp\stderr.txt") do set size=%%~zi
-if %size% equ 0 goto :show_stderr
+if %size% equ 0 goto :endofscript
 echo.
 echo stderr:
 type tmp\stderr.txt
 
 :endofscript
-
 echo.
 echo Launch unsuccessful. Exiting.
 pause
