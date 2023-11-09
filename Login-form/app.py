@@ -4,9 +4,8 @@ from flask_restful import Api
 from waitress import serve
 import os
 import sys
+import platform
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-sys.path.append('c:\\work\\stable-diffusion\\stable_diffusion_webui')
-
 from config.config import ServerConfig, DBConfig
 from controller.db_controller import DBConn
  
@@ -28,9 +27,19 @@ app.debug = scfg.debug
 basedir = os.path.abspath(os.path.dirname(__file__))
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
-# webui.py를 실행합니다.
-webui_path = os.path.join(current_directory, 'webui.py')
-subprocess.Popen(["python", webui_path])
+try:
+    if platform.system() == 'Windows':
+        # Windows에서 .bat 파일 실행
+        subprocess.Popen(["webui.bat"], cwd=current_directory, shell=True)
+    else:
+        # Unix 기반 OS에서 .sh 파일 실행
+        subprocess.Popen(["sh", "webui.sh"], cwd=current_directory)
+except FileNotFoundError as e:
+    print(f"File not found: {e}")
+except Exception as e:
+    print(f"Error running script: {e}")
+
+
 
 @app.route('/')
 def home():
