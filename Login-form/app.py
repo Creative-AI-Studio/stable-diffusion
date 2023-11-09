@@ -130,4 +130,6 @@ def register():
     return render_template('index.html')
 
 if __name__ == '__main__':
+    print(f"\n Running on http://{scfg.host}:{scfg.port}/ LOGIN-FORM \n")
     serve(app, host=scfg.host, port=scfg.port)
+    
