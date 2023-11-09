@@ -1,14 +1,45 @@
 import subprocess
+import sys
+import pkg_resources
+import os
+import platform
+requirements_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'requirements.txt'))
+
+if not os.path.isfile(requirements_path):
+    raise FileNotFoundError(f"Could not find a requirements.txt file at {requirements_path}")
+
+installed_packages = {pkg.key for pkg in pkg_resources.working_set}
+
+# Read the requirements file and install the packages
+def read_requirements(path):
+    for encoding in ['utf-8-sig', 'utf-16']:
+        try:
+            with open(path, 'r', encoding=encoding) as f:
+                return f.readlines()
+        except UnicodeDecodeError:
+            pass
+    raise UnicodeDecodeError(f"Could not decode the requirements file with any of the specified encodings.")
+
+lines = read_requirements(requirements_path)
+
+for line in lines:
+    package = line.strip()
+    package_name = package.split('==')[0] if '==' in package else package
+    
+    try:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install package {package}. Error: {e}")
+
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from flask_restful import Api
 from waitress import serve
-import os
-import sys
-import platform
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from config.config import ServerConfig, DBConfig
 from controller.db_controller import DBConn
- 
+
 # 서버 관련 config
 scfg = ServerConfig()
 # DB 관련 config
@@ -19,6 +50,8 @@ dbcfg = DBConfig()  # DBConfig 인스턴스 생성
 app = Flask(__name__)
 api = Api(app)
 
+
+
 # 세션을 위한 시크릿 키 설정
 app.secret_key = 'your_secret_key'  
 app.debug = scfg.debug
@@ -26,6 +59,7 @@ app.debug = scfg.debug
 # 현재 스크립트의 디렉토리 경로를 가져옵니다.
 basedir = os.path.abspath(os.path.dirname(__file__))
 current_directory = os.path.dirname(os.path.abspath(__file__))
+
 
 try:
     if platform.system() == 'Windows':
