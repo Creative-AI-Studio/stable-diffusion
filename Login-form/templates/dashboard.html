@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Page</title>
+    <style>
+           @import url("{{ url_for('static', filename='../static/style.css') }}");
+        </style>
+
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.responsive-image').forEach(function(image) {
+                image.addEventListener('click', function() {
+                });
+            });
+        });
+    </script>
+
+    <div class="container">
+        <div class="image-text-container">
+            <a href="http://127.0.0.1:7860" target="_blank" class="image-container">
+                <img src="{{ url_for('static', filename='stable_diffusion.png') }}" alt="Stable Diffusion" class="responsive-image">
+            </a>
+            <div class="text-block">
+                Stable Diffusion에 대한 설명을 여기에 작성하세요.
+            </div>
+        </div>
+        <div class="image-text-container">
+            <a href="your-link-for-chatbot" target="_blank" class="image-container">
+                <img src="{{ url_for('static', filename='chatbot.png') }}" alt="Chatbot" class="responsive-image">
+            </a>
+            <div class="text-block">
+                Chatbot에 대한 설명을 여기에 작성하세요.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

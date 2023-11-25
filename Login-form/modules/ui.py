@@ -331,7 +331,7 @@ def create_ui():
 
         extra_tabs = gr.Tabs(elem_id="txt2img_extra_tabs")
         extra_tabs.__enter__()
-
+        gr.HTML("<a href='https://naver.com' target='_blank'>Click here to visit our page</a>")
         with gr.Tab("Generation", id="txt2img_generation") as txt2img_generation_tab, ResizeHandleRow(equal_height=False):
             with gr.Column(variant='compact', elem_id="txt2img_settings"):
                 scripts.scripts_txt2img.prepare_ui()

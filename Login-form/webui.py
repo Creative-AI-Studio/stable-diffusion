@@ -14,6 +14,23 @@ initialize.imports()
 
 initialize.check_versions()
 
+chat_url = "https://github.com/vercel-labs/ai-chatbot"
+custom_script = f"""
+document.addEventListener('DOMContentLoaded', function() {{
+    var button = document.createElement('button');
+    button.innerHTML = 'Chat with AI';
+    button.style.position = 'fixed';
+    button.style.right = '20px';
+    button.style.top = '20px';
+    button.style.zIndex = 1000;
+    button.onclick = function() {{
+        window.open('{chat_url}', '_blank');
+    }};
+    document.body.appendChild(button);
+}});
+"""
+
+
 
 def create_api(app):
     from modules.api.api import Api

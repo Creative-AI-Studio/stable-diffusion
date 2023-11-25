@@ -249,3 +249,57 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
+
+/* 배경 이미지에 대한 스타일 */
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('background.png') center center no-repeat fixed; /* 배경 이미지 경로 설정 */
+  background-size: cover;
+  opacity: 0.7; /* 배경 이미지 투명도 설정 */
+  z-index: -1;
+}
+
+.container {
+  position: relative;
+  z-index: 1; /* 가상 요소보다 앞에 위치하도록 z-index 설정 */
+  display: flex;
+  justify-content: space-around; /* 이미지와 텍스트를 좌우에 균등하게 배치 */
+  align-items: center;
+  padding: 20px;
+}
+
+.image-text-container {
+  flex-basis: 45%; /* 각 컨테이너의 반 정도 크기 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.image-container {
+  width: 100%; /* 이미지를 컨테이너 크기에 맞춤 */
+  border-radius: 10px;
+  overflow: hidden; /* 확대 시 이미지가 컨테이너를 벗어나지 않도록 설정 */
+  transition: transform 0.3s ease; /* 확대 애니메이션 효과 */
+}
+
+.image-container:hover {
+  transform: scale(1.1); /* 마우스 오버 시 이미지 확대 */
+}
+
+.image-container img {
+  width: 100%; /* 이미지를 컨테이너 크기에 맞춤 */
+  height: auto; /* 이미지 높이를 비율에 맞게 조절 */
+}
+
+.text-block {
+  padding: 10px;
+  margin-top: 10px; /* 텍스트와 이미지 사이의 간격 */
+}

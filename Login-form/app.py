@@ -5,31 +5,31 @@ import os
 import platform
 requirements_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'requirements.txt'))
 
-if not os.path.isfile(requirements_path):
-    raise FileNotFoundError(f"Could not find a requirements.txt file at {requirements_path}")
+# if not os.path.isfile(requirements_path):
+#     raise FileNotFoundError(f"Could not find a requirements.txt file at {requirements_path}")
 
-installed_packages = {pkg.key for pkg in pkg_resources.working_set}
+# installed_packages = {pkg.key for pkg in pkg_resources.working_set}
 
-# Read the requirements file and install the packages
-def read_requirements(path):
-    for encoding in ['utf-8-sig', 'utf-16']:
-        try:
-            with open(path, 'r', encoding=encoding) as f:
-                return f.readlines()
-        except UnicodeDecodeError:
-            pass
-    raise UnicodeDecodeError(f"Could not decode the requirements file with any of the specified encodings.")
+# # Read the requirements file and install the packages
+# def read_requirements(path):
+#     for encoding in ['utf-8-sig', 'utf-16']:
+#         try:
+#             with open(path, 'r', encoding=encoding) as f:
+#                 return f.readlines()
+#         except UnicodeDecodeError:
+#             pass
+#     raise UnicodeDecodeError(f"Could not decode the requirements file with any of the specified encodings.")
 
-lines = read_requirements(requirements_path)
+# lines = read_requirements(requirements_path)
 
-for line in lines:
-    package = line.strip()
-    package_name = package.split('==')[0] if '==' in package else package
+# for line in lines:
+#     package = line.strip()
+#     package_name = package.split('==')[0] if '==' in package else package
     
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install package {package}. Error: {e}")
+#     try:
+#         subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
+#     except subprocess.CalledProcessError as e:
+#         print(f"Failed to install package {package}. Error: {e}")
 
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
@@ -61,17 +61,17 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 
-try:
-    if platform.system() == 'Windows':
-        # Windows에서 .bat 파일 실행
-        subprocess.Popen(["webui.bat"], cwd=current_directory, shell=True)
-    else:
-        # Unix 기반 OS에서 .sh 파일 실행
-        subprocess.Popen(["sh", "webui.sh"], cwd=current_directory)
-except FileNotFoundError as e:
-    print(f"File not found: {e}")
-except Exception as e:
-    print(f"Error running script: {e}")
+# try:
+#     if platform.system() == 'Windows':
+#         # Windows에서 .bat 파일 실행
+#         subprocess.Popen(["webui.bat"], cwd=current_directory, shell=True)
+#     else:
+#         # Unix 기반 OS에서 .sh 파일 실행
+#         subprocess.Popen(["sh", "webui.sh"], cwd=current_directory)
+# except FileNotFoundError as e:
+#     print(f"File not found: {e}")
+# except Exception as e:
+#     print(f"Error running script: {e}")
 
 
 
@@ -82,12 +82,14 @@ def home():
 def is_logged_in():
     return 'logged_in' in session and session['logged_in']
 
-@app.route('/webui')
-def webui():
-    if not is_logged_in():
+@app.route('/dashboard')
+def dashboard():
+    if is_logged_in():
+        # Render a dashboard page that includes the images and links
+        return render_template('dashboard.html')
+    else:
         flash('로그인이 필요합니다.', 'danger')
         return redirect(url_for('login'))
-    return redirect('http://127.0.0.1:7860')  
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -103,7 +105,7 @@ def login():
             session['logged_in'] = True
             session['email'] = email
             g.user_email = email
-            return redirect(url_for('webui'))
+            return redirect(url_for('dashboard'))
         else:
             flash('로그인 실패! 이메일 또는 비밀번호를 확인하세요.', 'danger')
             return render_template('index.html')
